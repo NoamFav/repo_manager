@@ -7,11 +7,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
-func AskOllama(prompt string) {
+func AskOllama(prompt string) string {
 	requestBody, _ := json.Marshal(map[string]interface{}{
-		"model":  "mistral", // your working model
+		"model":  "mistral",
 		"prompt": prompt,
 		"stream": true,
 	})
@@ -23,17 +24,20 @@ func AskOllama(prompt string) {
 	defer resp.Body.Close()
 
 	scanner := bufio.NewScanner(resp.Body)
+	var builder strings.Builder
+
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		// Each line is a tiny JSON chunk like {"response":"token"}
 		var chunk struct {
 			Response string `json:"response"`
 		}
 		if err := json.Unmarshal([]byte(line), &chunk); err == nil {
-			fmt.Print(chunk.Response) // print as it arrives, no newline
+			fmt.Print(chunk.Response)           // real-time print
+			builder.WriteString(chunk.Response) // also save it
 		}
 	}
 
-	fmt.Println() // add newline after full output
+	fmt.Println() // line break after the stream ends
+	return builder.String()
 }

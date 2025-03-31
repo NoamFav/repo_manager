@@ -1,26 +1,21 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
-
 	"github.com/NoamFav/auto_commit/src"
 )
 
 func main() {
-	fmt.Print("Enter your prompt: ")
+	var prompt string
 
-	reader := bufio.NewReader(os.Stdin)
-	prompt, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("❌ Failed to read input:", err)
-		return
-	}
+	fmt.Println("Getting git info...")
+	prompt = src.Summary()
+	fmt.Println("Prompt: ", prompt)
 
-	prompt = strings.TrimSpace(prompt) // remove trailing newline
-	fmt.Fprintln(os.Stdout, "🧠 Asking the LLM...\n")
+	prompt = "write a commit message with the following format in one sentece to be commited: <type>(<scope>): <subject>" + "\n" + prompt
+	fmt.Println("Asking Ollama...")
+	resp := src.AskOllama(prompt)
 
-	src.AskOllama(prompt)
+	fmt.Println("Committing...")
+	src.AddCommitPush(resp)
 }
