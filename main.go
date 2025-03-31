@@ -11,7 +11,7 @@ func main() {
 	prompt := src.Summary()
 
 	if prompt == "" {
-		fmt.Println("✅ Nothing to commit.")
+		fmt.Println(" Nothing to commit.")
 		return // This should stop execution here
 	}
 
