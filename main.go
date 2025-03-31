@@ -7,11 +7,10 @@ import (
 )
 
 func main() {
-	var prompt string
-
 	fmt.Println("Getting git info...")
-	prompt = src.Summary()
-	if strings.Contains(prompt, "Nothing to commit.") {
+	prompt := src.Summary()
+	if prompt == "" {
+		fmt.Println("✅ Nothing to commit.")
 		return
 	}
 

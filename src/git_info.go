@@ -25,7 +25,6 @@ func GitStatus() string {
 	status := string(out)
 	if strings.TrimSpace(status) == "" {
 		fmt.Println("Nothing to commit.")
-		status = "Nothing to commit."
 	}
 	return status
 }
@@ -35,7 +34,7 @@ func Summary() string {
 	status := GitStatus()
 
 	// Check if both are empty
-	if strings.TrimSpace(diff) == "" && strings.Contains(status, "Nothing to commit.") {
+	if strings.TrimSpace(status) == "" && strings.TrimSpace(diff) == "" {
 		return ""
 	}
 
