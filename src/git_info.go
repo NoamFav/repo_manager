@@ -12,6 +12,9 @@ func GitDiff() string {
 	if err != nil {
 		fmt.Println(err)
 	}
+	if strings.TrimSpace(string(out)) == "" {
+		fmt.Println("✅ No changes.")
+	}
 	return string(out)
 }
 
@@ -24,6 +27,7 @@ func GitStatus() string {
 	status := string(out)
 	if strings.TrimSpace(status) == "" {
 		fmt.Println("✅ Nothing to commit.")
+		status = "Nothing to commit."
 	}
 	return status
 }
