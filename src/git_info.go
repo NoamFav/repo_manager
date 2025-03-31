@@ -33,7 +33,15 @@ func GitStatus() string {
 }
 
 func Summary() string {
-	return fmt.Sprintf("Git Diff: %s\nGit Status: %s", GitDiff(), GitStatus())
+	diff := GitDiff()
+	status := GitStatus()
+
+	// Check if both are empty
+	if strings.TrimSpace(diff) == "" && strings.Contains(status, "Nothing to commit.") {
+		return ""
+	}
+
+	return fmt.Sprintf("Git Diff: %s\nGit Status: %s", diff, status)
 }
 
 func GitAdd() {
