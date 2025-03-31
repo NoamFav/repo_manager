@@ -9,9 +9,10 @@ import (
 func main() {
 	fmt.Println("Getting git info...")
 	prompt := src.Summary()
+
 	if prompt == "" {
 		fmt.Println("✅ Nothing to commit.")
-		return
+		return // This should stop execution here
 	}
 
 	prompt = "write a commit message with the following format in one sentece to be commited: <type>(<scope>): <subject>" + "\n" + prompt
