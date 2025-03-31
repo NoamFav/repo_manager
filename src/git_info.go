@@ -22,22 +22,19 @@ func GitStatus() string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	status := string(out)
-	if strings.TrimSpace(status) == "" {
-		fmt.Println("Nothing to commit.")
-	}
-	return status
+	return string(out)
 }
 
 func Summary() string {
-	diff := GitDiff()
 	status := GitStatus()
 
-	// Check if both are empty
-	if strings.TrimSpace(status) == "" && strings.TrimSpace(diff) == "" {
+	// Check if there's nothing to commit
+	if strings.TrimSpace(status) == "" {
 		return ""
 	}
 
+	// Get diff only if we have something to commit
+	diff := GitDiff()
 	return fmt.Sprintf("Git Diff: %s\nGit Status: %s", diff, status)
 }
 
