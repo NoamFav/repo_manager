@@ -11,6 +11,9 @@ func main() {
 
 	fmt.Println("Getting git info...")
 	prompt = src.Summary()
+	if strings.Contains(prompt, "Nothing to commit.") {
+		return
+	}
 
 	prompt = "write a commit message with the following format in one sentece to be commited: <type>(<scope>): <subject>" + "\n" + prompt
 	fmt.Println("Asking Ollama...")
