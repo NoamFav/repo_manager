@@ -3,6 +3,7 @@ package src
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 func GitDiff() string {
@@ -20,7 +21,11 @@ func GitStatus() string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return string(out)
+	status := string(out)
+	if strings.TrimSpace(status) == "" {
+		fmt.Println("✅ Nothing to commit.")
+	}
+	return status
 }
 
 func Summary() string {
