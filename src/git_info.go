@@ -35,6 +35,10 @@ func Summary() string {
 
 	// Get diff only if we have something to commit
 	diff := GitDiff()
+	if strings.TrimSpace(diff) == "" {
+		return ""
+	}
+
 	return fmt.Sprintf("Git Diff: %s\nGit Status: %s", diff, status)
 }
 
