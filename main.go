@@ -8,14 +8,19 @@ import (
 
 func main() {
 	fmt.Println("Getting git info...")
-	prompt := src.Summary()
+	prompt := fmt.Sprintf(`You are an AI Git assistant. Your task is to write a single-line, conventional commit message in the format:
+<type>(<scope>): <subject>
+
+Be concise, avoid bullet points or summaries. ONLY return the commit message, nothing else.
+
+Git diff and status:
+%s`, src.Summary())
 
 	if prompt == "" {
 		fmt.Println(" Nothing to commit.")
 		return // This should stop execution here
 	}
 
-	prompt = "write a commit message with the following format in one sentece to be commited: <type>(<scope>): <subject>" + "\n" + prompt
 	fmt.Println("Asking Ollama...")
 	resp := src.AskOllama(prompt)
 	resp = strings.TrimSpace(resp)
