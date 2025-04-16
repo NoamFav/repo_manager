@@ -1,4 +1,4 @@
-#!/src/bin/env python3
+#!/usr/bin/env python3
 
 import os
 import subprocess
@@ -343,7 +343,7 @@ def process_repository(entry_path, entry, args, task_id=None, progress=None):
             )
             console.print("[bold blue]Executing auto_commit...[/]")
             result = subprocess.run(
-                ["auto_commit", commit_message],
+                ["ai_commit", commit_message],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
