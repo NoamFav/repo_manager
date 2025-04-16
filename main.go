@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/NoamFav/repo_manager/src/ai_commit"
+	"github.com/NoamFav/auto_commit/src/ai_commit"
 	"strings"
 )
 

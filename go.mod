@@ -1,3 +1,3 @@
-module github.com/NoamFav/repo_manager
+module github.com/NoamFav/auto_commit
 
 go 1.24.1
