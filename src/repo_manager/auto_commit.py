@@ -329,8 +329,8 @@ def process_repository(entry_path, entry, args, task_id=None, progress=None):
         if status_table.row_count > 0:
             console.print(status_table)
 
-        # Use auto_commit or handle git operations manually
-        if args.use_auto_commit:
+        # Use ai_commit or handle git operations manually
+        if args.use_ai_commit:
             # Generate a commit message if set to auto-commit
             commit_message = (
                 args.commit_message
@@ -339,9 +339,9 @@ def process_repository(entry_path, entry, args, task_id=None, progress=None):
             )
 
             console.print(
-                f"\n[bold cyan]{get_icon('commit')} Using auto_commit command[/]"
+                f"\n[bold cyan]{get_icon('commit')} Using ai_commit command[/]"
             )
-            console.print("[bold blue]Executing auto_commit...[/]")
+            console.print("[bold blue]Executing ai_commit...[/]")
             result = subprocess.run(
                 ["ai_commit", commit_message],
                 stdout=subprocess.PIPE,
@@ -351,18 +351,18 @@ def process_repository(entry_path, entry, args, task_id=None, progress=None):
 
             if result.returncode == 0:
                 console.print(
-                    f"[bold green]{get_icon('success')} auto_commit executed successfully[/]"
+                    f"[bold green]{get_icon('success')} ai_commit executed successfully[/]"
                 )
                 if result.stdout.strip():
                     console.print(
                         Panel(
                             result.stdout.strip(),
-                            title="auto_commit output",
+                            title="ai_commit output",
                             border_style="green",
                         )
                     )
             else:
-                console.print(f"[bold red]{get_icon('error')} auto_commit failed[/]")
+                console.print(f"[bold red]{get_icon('error')} ai_commit failed[/]")
                 if result.stderr.strip():
                     console.print(
                         Panel(result.stderr.strip(), title="Error", border_style="red")
@@ -560,9 +560,9 @@ def main():
     parser.add_argument(
         "--no-auto-commit",
         action="store_false",
-        dest="use_auto_commit",
+        dest="use_ai_commit",
         default=True,
-        help="Don't use the auto_commit command (use manual git commands instead).",
+        help="Don't use the ai_commit command (use manual git commands instead).",
     )
     parser.add_argument(
         "--dir",
@@ -594,7 +594,7 @@ def main():
     config_table.add_row("Pull Changes", "Yes" if args.pull else "No")
     config_table.add_row("Handle .gitignore", "Yes" if args.handle_gitignore else "No")
     config_table.add_row("Remove .DS_Store", "Yes" if args.remove_ds_store else "No")
-    config_table.add_row("Using auto_commit", "Yes" if args.use_auto_commit else "No")
+    config_table.add_row("Using ai_commit", "Yes" if args.use_ai_commit else "No")
     config_table.add_row(
         "Commit Message",
         "AI Generated" if args.commit_message == "auto-commit" else args.commit_message,
