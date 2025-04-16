@@ -4,6 +4,7 @@ import os
 import subprocess
 import argparse
 import glob
+import argcomplete
 import time
 import shutil
 import random
@@ -639,6 +640,7 @@ def main():
         border_style="blue",
     )
     console.print(summary_panel)
+    argcomplete.autocomplete(parser)
 
     # Process repositories with progress bar
     if git_repos:

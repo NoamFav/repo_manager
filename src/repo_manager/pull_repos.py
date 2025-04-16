@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import argcomplete
 import argparse
 import json
 import time
@@ -357,6 +358,7 @@ def main():
         border_style="blue",
     )
     console.print(summary_panel)
+    argcomplete.autocomplete(parser)
 
     # Process repositories
     if repositories:
