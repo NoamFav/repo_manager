@@ -18,154 +18,89 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-// Enhanced color palette
-var (
-	primaryColor  = lipgloss.Color("#6366f1") // Indigo
-	successColor  = lipgloss.Color("#10b981") // Emerald
-	errorColor    = lipgloss.Color("#ef4444") // Red
-	warningColor  = lipgloss.Color("#f59e0b") // Amber
-	infoColor     = lipgloss.Color("#3b82f6") // Blue
-	accentColor   = lipgloss.Color("#8b5cf6") // Violet
-	mutedColor    = lipgloss.Color("#6b7280") // Gray
-	borderColor   = lipgloss.Color("#e5e7eb") // Light gray
-	gradientStart = lipgloss.Color("#667eea") // Gradient start
-	gradientEnd   = lipgloss.Color("#764ba2") // Gradient end
-)
-
-// Enhanced styles with modern design
+// Styles
 var (
 	titleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#ffffff")).
-			Background(primaryColor).
-			Padding(1, 3).
-			Bold(true).
-			Align(lipgloss.Center).
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(primaryColor)
+			Foreground(lipgloss.Color("86")).
+			Background(lipgloss.Color("57")).
+			Padding(0, 1).
+			Bold(true)
 
 	headerStyle = lipgloss.NewStyle().
-			Border(lipgloss.ThickBorder()).
-			BorderForeground(gradientStart).
-			Padding(2, 4).
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("86")).
+			Padding(1, 2).
 			Bold(true).
-			Align(lipgloss.Center).
-			Foreground(primaryColor)
+			Align(lipgloss.Center)
 
 	successStyle = lipgloss.NewStyle().
-			Foreground(successColor).
-			Bold(true).
-			Padding(0, 1)
+			Foreground(lipgloss.Color("46")).
+			Bold(true)
 
 	errorStyle = lipgloss.NewStyle().
-			Foreground(errorColor).
-			Bold(true).
-			Padding(0, 1)
+			Foreground(lipgloss.Color("196")).
+			Bold(true)
 
 	infoStyle = lipgloss.NewStyle().
-			Foreground(infoColor).
-			Bold(true).
-			Padding(0, 1)
+			Foreground(lipgloss.Color("39")).
+			Bold(true)
 
 	warningStyle = lipgloss.NewStyle().
-			Foreground(warningColor).
-			Bold(true).
-			Padding(0, 1)
-
-	cardStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(borderColor).
-			Padding(1, 2).
-			Margin(1, 0).
-			Background(lipgloss.Color("#f8fafc"))
-
-	repoCardStyle = lipgloss.NewStyle().
-			Border(lipgloss.DoubleBorder()).
-			BorderForeground(accentColor).
-			Padding(1, 2).
-			Margin(1, 0).
-			Background(lipgloss.Color("#faf5ff")).
+			Foreground(lipgloss.Color("226")).
 			Bold(true)
+
+	repoStyle = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("57")).
+			Padding(0, 1).
+			Margin(1, 0)
 
 	statusStyle = lipgloss.NewStyle().
-			Foreground(mutedColor).
-			Italic(true).
-			Padding(0, 1)
+			Foreground(lipgloss.Color("243")).
+			Italic(true)
 
 	branchStyle = lipgloss.NewStyle().
-			Foreground(accentColor).
-			Bold(true).
-			Background(lipgloss.Color("#f3f4f6")).
-			Padding(0, 1).
-			Border(lipgloss.NormalBorder()).
-			BorderForeground(accentColor)
+			Foreground(lipgloss.Color("211")).
+			Bold(true)
 
 	configTableStyle = lipgloss.NewStyle().
-				Border(lipgloss.ThickBorder()).
-				BorderForeground(primaryColor).
-				Padding(2, 3).
-				Margin(1, 0).
-				Background(lipgloss.Color("#f0f9ff"))
-
-	progressBarStyle = lipgloss.NewStyle().
 				Border(lipgloss.RoundedBorder()).
-				BorderForeground(successColor).
+				BorderForeground(lipgloss.Color("86")).
 				Padding(1, 2).
 				Margin(1, 0)
-
-	summaryCardStyle = lipgloss.NewStyle().
-				Border(lipgloss.ThickBorder()).
-				BorderForeground(successColor).
-				Padding(2, 3).
-				Margin(1, 0).
-				Background(lipgloss.Color("#f0fdf4"))
-
-	resultItemStyle = lipgloss.NewStyle().
-			Padding(0, 2).
-			Margin(0, 1)
-
-	separatorStyle = lipgloss.NewStyle().
-			Foreground(borderColor).
-			Bold(true)
 )
 
-// Enhanced icons with better variety
+// Icons
 const (
-	IconGit        = "🌟" // Changed from 🔗
-	IconFolder     = "📂" // Changed from 📁
-	IconSuccess    = "✨" // Changed from ✅
-	IconError      = "💥" // Changed from ❌
-	IconInfo       = "💡" // Changed from ℹ️
-	IconWarning    = "⚡" // Changed from ⚠️
-	IconCommit     = "💾" // Changed from 📝
-	IconPush       = "🚀" // Changed from ☁️
+	IconGit        = "🔗"
+	IconFolder     = "📁"
+	IconSuccess    = "✅"
+	IconError      = "❌"
+	IconInfo       = "ℹ️"
+	IconWarning    = "⚠️"
+	IconCommit     = "📝"
+	IconPush       = "☁️"
 	IconPull       = "⬇️"
-	IconBranch     = "🌸" // Changed from 🌿
-	IconMainBranch = "🌺" // Changed from 🌳
+	IconBranch     = "🌿"
+	IconMainBranch = "🌳"
 	IconAdd        = "➕"
-	IconRemove     = "🗑️" // Changed from ➖
-	IconClock      = "⏱️" // Changed from ⏰
+	IconRemove     = "➖"
+	IconClock      = "⏰"
 	IconSparkles   = "✨"
 	IconRocket     = "🚀"
 	IconConfig     = "⚙️"
-	IconCheck      = "✅" // Changed from ✓
+	IconCheck      = "✓"
 	IconDot        = "•"
-	IconProgress   = "🔄"
-	IconComplete   = "🎉"
-	IconScanning   = "🔍"
-	IconRepo       = "📦"
-	IconStats      = "📊"
 )
 
-// Enhanced file type icons
+// File type icons
 func getFileIcon(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
 	switch ext {
 	case ".py":
 		return "🐍"
-	case ".js", ".jsx":
-		return "💛"
-	case ".ts", ".tsx":
-		return "💙"
+	case ".js", ".jsx", ".ts", ".tsx":
+		return "📜"
 	case ".html":
 		return "🌐"
 	case ".css":
@@ -178,20 +113,14 @@ func getFileIcon(filename string) string {
 		return "📝"
 	case ".yml", ".yaml":
 		return "⚙️"
-	case ".png", ".jpg", ".jpeg", ".gif", ".svg":
+	case ".png", ".jpg", ".jpeg", ".gif":
 		return "🖼️"
-	case ".mp3", ".wav", ".flac":
+	case ".mp3", ".wav":
 		return "🎵"
-	case ".mp4", ".mov", ".avi":
+	case ".mp4", ".mov":
 		return "🎬"
-	case ".zip", ".tar", ".gz", ".rar":
+	case ".zip", ".tar", ".gz":
 		return "📦"
-	case ".pdf":
-		return "📄"
-	case ".txt":
-		return "📃"
-	case ".doc", ".docx":
-		return "📝"
 	default:
 		return "📄"
 	}
@@ -228,8 +157,6 @@ type Model struct {
 	results      []string
 	startTime    time.Time
 	logs         []string
-	width        int
-	height       int
 }
 
 // Messages
@@ -247,10 +174,10 @@ type allDoneMsg struct{}
 
 func initialModel(config Config) Model {
 	s := spinner.New()
-	s.Spinner = spinner.Globe
-	s.Style = lipgloss.NewStyle().Foreground(primaryColor)
+	s.Spinner = spinner.Dot
+	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 
-	p := progress.New(progress.WithScaledGradient(string(gradientStart), string(gradientEnd)))
+	p := progress.New(progress.WithDefaultGradient())
 
 	return Model{
 		config:    config,
@@ -258,8 +185,6 @@ func initialModel(config Config) Model {
 		spinner:   s,
 		progress:  p,
 		startTime: time.Now(),
-		width:     80,
-		height:    24,
 	}
 }
 
@@ -272,13 +197,9 @@ func (m Model) Init() tea.Cmd {
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		m.width = msg.Width
-		m.height = msg.Height
-
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "ctrl+c", "q", "esc":
+		case "ctrl+c", "q":
 			return m, tea.Quit
 		}
 
@@ -293,14 +214,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case repoProcessedMsg:
 		m.currentRepo++
-		statusIcon := IconSuccess
-		if !msg.success {
-			statusIcon = IconError
+		if msg.success {
+			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
+				IconSuccess, msg.repo.Name, msg.message))
+		} else {
+			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
+				IconError, msg.repo.Name, msg.message))
 		}
-
-		m.results = append(m.results, fmt.Sprintf("%s %s: %s",
-			statusIcon, msg.repo.Name, msg.message))
-
+		
 		if m.currentRepo >= len(m.repositories) {
 			m.state = "done"
 			return m, tea.Sequence(tea.Tick(time.Second, func(t time.Time) tea.Msg {
@@ -328,129 +249,68 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	var b strings.Builder
 
-	// Main title with enhanced styling
-	title := fmt.Sprintf("%s Git Repository Manager %s", IconRocket, IconSparkles)
-	styledTitle := headerStyle.Width(m.width - 4).Render(title)
-	b.WriteString(styledTitle + "\n\n")
+	// Header
+	header := headerStyle.Render(fmt.Sprintf("%s Git Repository Manager %s", 
+		IconRocket, IconSparkles))
+	b.WriteString(header + "\n\n")
 
-	// Add decorative separator
-	separator := separatorStyle.Render(strings.Repeat("─", m.width-4))
-	b.WriteString(separator + "\n\n")
+	// Configuration table
+	if m.state == "scanning" || m.state == "processing" {
+		configTable := m.renderConfigTable()
+		b.WriteString(configTable + "\n\n")
+	}
 
 	switch m.state {
 	case "scanning":
-		// Enhanced scanning view
-		scanCard := cardStyle.Render(fmt.Sprintf(
-			"%s %s Discovering Git repositories...\n\n%s Scanning directory: %s",
-			IconScanning, m.spinner.View(), IconFolder, m.config.BaseDir))
-		b.WriteString(scanCard + "\n\n")
-
-		// Configuration preview during scanning
-		configTable := m.renderConfigTable()
-		b.WriteString(configTable + "\n")
+		b.WriteString(fmt.Sprintf("%s Scanning for Git repositories...\n", 
+			m.spinner.View()))
 
 	case "processing":
 		if len(m.repositories) > 0 {
-			// Enhanced progress display
 			progressPercent := float64(m.currentRepo) / float64(len(m.repositories))
+			b.WriteString(fmt.Sprintf("Processing repositories: %d/%d\n", 
+				m.currentRepo, len(m.repositories)))
+			b.WriteString(m.progress.ViewAs(progressPercent) + "\n\n")
 
-			progressInfo := fmt.Sprintf("%s Processing repositories: %d/%d",
-				IconProgress, m.currentRepo, len(m.repositories))
-
-			progressCard := progressBarStyle.Render(
-				progressInfo + "\n" + m.progress.ViewAs(progressPercent))
-			b.WriteString(progressCard + "\n")
-
-			// Show current repository being processed with enhanced styling
+			// Show current repository being processed
 			if m.currentRepo < len(m.repositories) {
 				currentRepo := m.repositories[m.currentRepo]
-				repoInfo := fmt.Sprintf(
-					"%s %s\n%s Branch: %s\n%s Status: Processing...",
-					IconRepo, currentRepo.Name,
-					IconBranch, branchStyle.Render(currentRepo.Branch),
-					IconClock)
-
-				currentRepoCard := repoCardStyle.Render(repoInfo)
-				b.WriteString(currentRepoCard + "\n")
-			}
-
-			// Show recent results
-			if len(m.results) > 0 {
-				recentResults := m.results
-				if len(recentResults) > 3 {
-					recentResults = recentResults[len(recentResults)-3:]
-				}
-
-				b.WriteString(infoStyle.Render("Recent Results:") + "\n")
-				for _, result := range recentResults {
-					b.WriteString(resultItemStyle.Render(result) + "\n")
-				}
+				repoInfo := repoStyle.Render(fmt.Sprintf("%s %s\n%s Branch: %s", 
+					IconFolder, currentRepo.Name, 
+					IconBranch, branchStyle.Render(currentRepo.Branch)))
+				b.WriteString(repoInfo + "\n")
 			}
 		}
 
 	case "done":
-		// Enhanced completion summary
+		// Summary
 		elapsed := time.Since(m.startTime)
 		successCount := 0
-		errorCount := 0
-
 		for _, result := range m.results {
 			if strings.Contains(result, IconSuccess) {
 				successCount++
-			} else if strings.Contains(result, IconError) {
-				errorCount++
 			}
 		}
 
-		// Create stats summary
-		stats := fmt.Sprintf(
-			"%s Processing Complete!\n\n"+
-				"%s Successfully processed: %d repositories\n"+
-				"%s Failed: %d repositories\n"+
-				"%s Total repositories: %d\n"+
-				"%s Total time: %.2f seconds\n"+
-				"%s Average time per repo: %.2f seconds",
-			IconComplete,
-			IconCheck, successCount,
-			IconError, errorCount,
-			IconRepo, len(m.repositories),
-			IconClock, elapsed.Seconds(),
-			IconStats, elapsed.Seconds()/float64(len(m.repositories)))
+		summary := fmt.Sprintf("%s Processing Complete!\n", IconSparkles)
+		summary += fmt.Sprintf("Successfully processed: %d/%d repositories\n", 
+			successCount, len(m.repositories))
+		summary += fmt.Sprintf("%s Total time: %.2f seconds\n", 
+			IconClock, elapsed.Seconds())
 
-		var summaryCard string
-		if errorCount == 0 && successCount > 0 {
-			summaryCard = summaryCardStyle.BorderForeground(successColor).Render(stats)
-		} else if errorCount > 0 {
-			summaryCard = summaryCardStyle.BorderForeground(warningColor).Render(stats)
+		if successCount == len(m.repositories) {
+			b.WriteString(successStyle.Render(summary) + "\n\n")
 		} else {
-			summaryCard = summaryCardStyle.BorderForeground(infoColor).Render(stats)
+			b.WriteString(warningStyle.Render(summary) + "\n\n")
 		}
 
-		b.WriteString(summaryCard + "\n\n")
-
-		// Enhanced results display
-		if len(m.results) > 0 {
-			b.WriteString(infoStyle.Render("Detailed Results:") + "\n")
-			b.WriteString(separatorStyle.Render(strings.Repeat("─", 50)) + "\n")
-
-			for i, result := range m.results {
-				resultStyle := resultItemStyle
-				if strings.Contains(result, IconSuccess) {
-					resultStyle = resultStyle.Foreground(successColor)
-				} else if strings.Contains(result, IconError) {
-					resultStyle = resultStyle.Foreground(errorColor)
-				}
-
-				formattedResult := fmt.Sprintf("%d. %s", i+1, result)
-				b.WriteString(resultStyle.Render(formattedResult) + "\n")
-			}
+		// Show results
+		for _, result := range m.results {
+			b.WriteString(result + "\n")
 		}
 	}
 
-	// Enhanced footer
-	b.WriteString("\n" + separatorStyle.Render(strings.Repeat("─", m.width-4)) + "\n")
-	footer := statusStyle.Render("Press 'q', 'esc', or Ctrl+C to quit")
-	b.WriteString(footer)
+	b.WriteString("\n" + statusStyle.Render("Press 'q' or Ctrl+C to quit"))
 
 	return b.String()
 }
@@ -458,49 +318,24 @@ func (m Model) View() string {
 func (m Model) renderConfigTable() string {
 	var table strings.Builder
 
-	// Enhanced configuration display
-	configTitle := titleStyle.Render(fmt.Sprintf("%s Configuration", IconConfig))
-	table.WriteString(configTitle + "\n\n")
-
-	// Create a more structured config display
-	configs := []struct {
-		label string
-		value string
-		icon  string
-	}{
-		{"Base Directory", m.config.BaseDir, IconFolder},
-		{"Pull Changes", boolToYesNo(m.config.Pull), IconPull},
-		{"Handle .gitignore", boolToYesNo(m.config.HandleGitignore), IconConfig},
-		{"Remove .DS_Store", boolToYesNo(m.config.RemoveDSStore), IconRemove},
-		{"Using AI Commit", boolToYesNo(m.config.UseAICommit), IconCommit},
-	}
-
-	for _, config := range configs {
-		configLine := fmt.Sprintf("%s %s: %s",
-			config.icon, config.label, config.value)
-		table.WriteString(configLine + "\n")
-	}
-
-	// Commit message handling
+	table.WriteString(titleStyle.Render("Configuration") + "\n")
+	table.WriteString(fmt.Sprintf("Base Directory: %s\n", m.config.BaseDir))
+	table.WriteString(fmt.Sprintf("Pull Changes: %s\n", boolToYesNo(m.config.Pull)))
+	table.WriteString(fmt.Sprintf("Handle .gitignore: %s\n", boolToYesNo(m.config.HandleGitignore)))
+	table.WriteString(fmt.Sprintf("Remove .DS_Store: %s\n", boolToYesNo(m.config.RemoveDSStore)))
+	table.WriteString(fmt.Sprintf("Using AI Commit: %s\n", boolToYesNo(m.config.UseAICommit)))
+	
 	commitMsg := m.config.CommitMessage
 	if commitMsg == "auto-commit" {
-		commitMsg = successStyle.Render("AI Generated")
-	} else {
-		commitMsg = infoStyle.Render(commitMsg)
+		commitMsg = "AI Generated"
 	}
-	table.WriteString(fmt.Sprintf("%s Commit Message: %s\n", IconCommit, commitMsg))
+	table.WriteString(fmt.Sprintf("Commit Message: %s\n", commitMsg))
 
-	// Lists with better formatting
 	if len(m.config.ExcludeList) > 0 {
-		excludeList := strings.Join(m.config.ExcludeList, ", ")
-		table.WriteString(fmt.Sprintf("%s Excluded: %s\n",
-			IconRemove, warningStyle.Render(excludeList)))
+		table.WriteString(fmt.Sprintf("Excluded: %s\n", strings.Join(m.config.ExcludeList, ", ")))
 	}
-
 	if len(m.config.OnlyList) > 0 {
-		onlyList := strings.Join(m.config.OnlyList, ", ")
-		table.WriteString(fmt.Sprintf("%s Including Only: %s\n",
-			IconAdd, successStyle.Render(onlyList)))
+		table.WriteString(fmt.Sprintf("Including Only: %s\n", strings.Join(m.config.OnlyList, ", ")))
 	}
 
 	return configTableStyle.Render(table.String())
@@ -508,12 +343,12 @@ func (m Model) renderConfigTable() string {
 
 func boolToYesNo(b bool) string {
 	if b {
-		return successStyle.Render("✓ Yes")
+		return successStyle.Render("Yes")
 	}
-	return errorStyle.Render("✗ No")
+	return errorStyle.Render("No")
 }
 
-// Commands remain the same but with enhanced error handling
+// Commands
 func scanRepositories(config Config) tea.Cmd {
 	return func() tea.Msg {
 		entries, err := os.ReadDir(config.BaseDir)
@@ -529,12 +364,12 @@ func scanRepositories(config Config) tea.Cmd {
 			}
 
 			name := entry.Name()
-
+			
 			// Check exclusions
 			if contains(config.ExcludeList, name) {
 				continue
 			}
-
+			
 			// Check only list
 			if len(config.OnlyList) > 0 && !contains(config.OnlyList, name) {
 				continue
@@ -542,11 +377,11 @@ func scanRepositories(config Config) tea.Cmd {
 
 			repoPath := filepath.Join(config.BaseDir, name)
 			gitPath := filepath.Join(repoPath, ".git")
-
+			
 			if _, err := os.Stat(gitPath); err == nil {
 				// Get current branch
 				branch := getCurrentBranch(repoPath)
-
+				
 				repo := Repository{
 					Name:   name,
 					Path:   repoPath,
@@ -581,7 +416,7 @@ func processRepository(repo Repository, config Config) (bool, string) {
 	// Change to repository directory
 	originalDir, _ := os.Getwd()
 	defer os.Chdir(originalDir)
-
+	
 	if err := os.Chdir(repo.Path); err != nil {
 		return false, fmt.Sprintf("Failed to change directory: %v", err)
 	}
@@ -658,7 +493,7 @@ func processRepository(repo Repository, config Config) (bool, string) {
 	return true, strings.Join(operations, ", ")
 }
 
-// Helper functions (unchanged)
+// Helper functions
 func contains(slice []string, item string) bool {
 	for _, s := range slice {
 		if s == item {
@@ -671,15 +506,15 @@ func contains(slice []string, item string) bool {
 func getCurrentBranch(repoPath string) string {
 	originalDir, _ := os.Getwd()
 	defer os.Chdir(originalDir)
-
+	
 	os.Chdir(repoPath)
-
+	
 	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
 	output, err := cmd.Output()
 	if err != nil {
 		return "unknown"
 	}
-
+	
 	return strings.TrimSpace(string(output))
 }
 
@@ -694,30 +529,30 @@ func hasUncommittedChanges() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
+	
 	return len(strings.TrimSpace(string(output))) > 0, nil
 }
 
 func ensureGitignoreHasDSStore(repoPath string) error {
 	gitignorePath := filepath.Join(repoPath, ".gitignore")
-
+	
 	// Read existing .gitignore or create new one
 	content := ""
 	if data, err := os.ReadFile(gitignorePath); err == nil {
 		content = string(data)
 	}
-
+	
 	// Check if .DS_Store is already in .gitignore
 	if strings.Contains(content, ".DS_Store") {
 		return nil
 	}
-
+	
 	// Add .DS_Store to .gitignore
 	if content != "" && !strings.HasSuffix(content, "\n") {
 		content += "\n"
 	}
 	content += ".DS_Store\n"
-
+	
 	return os.WriteFile(gitignorePath, []byte(content), 0644)
 }
 
@@ -727,7 +562,7 @@ func removeDSStoreFiles(repoPath string) (int, error) {
 		if err != nil {
 			return err
 		}
-
+		
 		if info.Name() == ".DS_Store" {
 			// Remove from git tracking
 			exec.Command("git", "rm", "--cached", path).Run()
@@ -736,40 +571,33 @@ func removeDSStoreFiles(repoPath string) (int, error) {
 				count++
 			}
 		}
-
+		
 		return nil
 	})
-
+	
 	return count, err
 }
 
-// Enhanced commit message generation with more variety
 func generateCommitMessage() string {
 	prefixes := []string{
-		"✨ Add", "🔧 Fix", "♻️ Refactor", "⚡ Improve", "🎨 Enhance", "🚀 Optimize",
-		"📝 Update", "🗑️ Remove", "🔨 Modify", "🏗️ Restructure", "🧹 Clean up",
-		"🔒 Secure", "📦 Bundle", "🎯 Focus", "💡 Implement", "🔀 Merge",
+		"Update", "Enhance", "Fix", "Refactor", "Improve", "Optimize",
+		"Add", "Remove", "Modify", "Restructure", "Clean up",
 	}
-
+	
 	areas := []string{
-		"codebase", "functionality", "architecture", "UI/UX", "performance",
-		"documentation", "configuration", "dependencies", "features", "components",
-		"API endpoints", "database schema", "test coverage", "error handling",
-		"user experience", "code quality", "security measures", "build process",
+		"codebase", "functionality", "structure", "design", "performance",
+		"documentation", "configuration", "dependencies", "features", "UI",
 	}
-
+	
 	details := []string{
 		"for better maintainability", "to improve user experience",
 		"for compatibility with latest standards", "to address technical debt",
 		"for enhanced security", "to optimize resource usage",
-		"based on user feedback", "following best practices",
-		"to meet accessibility standards", "for improved performance",
-		"to reduce complexity", "for better error handling",
-		"to enhance readability", "for future scalability",
+		"based on feedback", "following best practices",
 	}
-
+	
 	rand.Seed(time.Now().UnixNano())
-
+	
 	return fmt.Sprintf("%s %s %s",
 		prefixes[rand.Intn(len(prefixes))],
 		areas[rand.Intn(len(areas))],
@@ -778,25 +606,25 @@ func generateCommitMessage() string {
 
 func main() {
 	var config Config
-
+	
 	// Parse command line flags
-	flag.StringVar(&config.BaseDir, "dir", filepath.Join(os.Getenv("HOME"), "Neoware"),
+	flag.StringVar(&config.BaseDir, "dir", filepath.Join(os.Getenv("HOME"), "Neoware"), 
 		"Base directory containing git repositories")
-	flag.BoolVar(&config.Pull, "pull", false,
+	flag.BoolVar(&config.Pull, "pull", false, 
 		"Pull changes from the remote repository")
-	flag.BoolVar(&config.HandleGitignore, "handle-gitignore", false,
+	flag.BoolVar(&config.HandleGitignore, "handle-gitignore", false, 
 		"Ensure .gitignore includes .DS_Store and update it if necessary")
-	flag.BoolVar(&config.RemoveDSStore, "remove-ds-store", false,
+	flag.BoolVar(&config.RemoveDSStore, "remove-ds-store", false, 
 		"Remove .DS_Store files from the repository")
-	flag.StringVar(&config.CommitMessage, "commit-message", "auto-commit",
+	flag.StringVar(&config.CommitMessage, "commit-message", "auto-commit", 
 		"Commit message to use (or 'auto-commit' for AI-generated messages)")
-	flag.StringSliceVar(&config.ExcludeList, "exclude", []string{},
+	flag.StringSliceVar(&config.ExcludeList, "exclude", []string{}, 
 		"List of directories to exclude")
-	flag.StringSliceVar(&config.OnlyList, "only", []string{},
+	flag.StringSliceVar(&config.OnlyList, "only", []string{}, 
 		"List of directories to include (if empty, include all)")
-	flag.BoolVar(&config.UseAICommit, "use-ai-commit", true,
+	flag.BoolVar(&config.UseAICommit, "use-ai-commit", true, 
 		"Use the ai_commit command")
-
+	
 	flag.Parse()
 
 	// Expand home directory
@@ -806,7 +634,7 @@ func main() {
 
 	// Initialize and run the Bubble Tea program
 	p := tea.NewProgram(initialModel(config), tea.WithAltScreen())
-
+	
 	if _, err := p.Run(); err != nil {
 		log.Fatal("Error running program", "error", err)
 	}
