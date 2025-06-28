@@ -1,4 +1,4 @@
-module github.com/NoamFav/ai_commit
+module github.com/NoamFav/Zvezda
 
 go 1.24.1
 

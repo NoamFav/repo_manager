@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/NoamFav/ai_commit/src/ai_commit"
+	"github.com/NoamFav/Zvezda/src/ai_commit"
 	"strings"
 )
 
-func main() {
+func main_() {
 	fmt.Println("Getting git info...")
 	prompt := src.GenerateCommitPrompt()
 
