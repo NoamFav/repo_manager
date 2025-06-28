@@ -19,4 +19,26 @@ var (
 			Bold(true).
 			Foreground(titleColor).
 			MarginBottom(1)
+
+	RepoCard100 = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("#FFD700")).
+			Width(30).
+			Height(5).
+			Padding(0, 2).
+			Margin(1, 0).
+			Align(lipgloss.Center).
+			AlignVertical(lipgloss.Center)
+
+	RepoCard75 = RepoCard100.
+			BorderForeground(lipgloss.Color("#AAAAAA")).
+			Width(24).
+			Height(4)
+
+	RepoCard50 = RepoCard100.
+			BorderForeground(lipgloss.Color("#555555")).
+			Width(18).
+			Height(3)
+
+	RepoHidden = lipgloss.NewStyle().Width(0).Height(0)
 )
