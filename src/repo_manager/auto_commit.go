@@ -21,108 +21,140 @@ import (
 // Styles
 var (
 	titleStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("86")).
-			Background(lipgloss.Color("57")).
-			Padding(0, 1).
-			Bold(true)
+			Foreground(lipgloss.Color("#89b4fa")).
+			Background(lipgloss.Color("#313244")).
+			Padding(0, 2).
+			Bold(true).
+			MarginBottom(1)
 
 	headerStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color("86")).
-			Padding(1, 2).
+			Border(lipgloss.DoubleBorder()).
+			BorderForeground(lipgloss.Color("#89b4fa")).
+			Padding(1, 3).
 			Bold(true).
-			Align(lipgloss.Center)
+			Align(lipgloss.Center).
+			Foreground(lipgloss.Color("#cdd6f4"))
 
 	successStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("46")).
+			Foreground(lipgloss.Color("#a6e3a1")).
 			Bold(true)
 
 	errorStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("196")).
+			Foreground(lipgloss.Color("#f38ba8")).
 			Bold(true)
 
 	infoStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("39")).
+			Foreground(lipgloss.Color("#74c7ec")).
 			Bold(true)
 
 	warningStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("226")).
+			Foreground(lipgloss.Color("#f9e2af")).
 			Bold(true)
 
 	repoStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color("57")).
-			Padding(0, 1).
-			Margin(1, 0)
+			BorderForeground(lipgloss.Color("#89b4fa")).
+			Padding(1, 2).
+			Margin(1, 0).
+			Background(lipgloss.Color("#1e1e2e"))
+
+	currentRepoStyle = lipgloss.NewStyle().
+				Border(lipgloss.ThickBorder()).
+				BorderForeground(lipgloss.Color("#fab387")).
+				Padding(1, 2).
+				Margin(1, 0).
+				Background(lipgloss.Color("#313244"))
 
 	statusStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("243")).
+			Foreground(lipgloss.Color("#6c7086")).
 			Italic(true)
 
 	branchStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("211")).
+			Foreground(lipgloss.Color("#cba6f7")).
 			Bold(true)
 
 	configTableStyle = lipgloss.NewStyle().
 				Border(lipgloss.RoundedBorder()).
-				BorderForeground(lipgloss.Color("86")).
+				BorderForeground(lipgloss.Color("#89b4fa")).
 				Padding(1, 2).
+				Margin(1, 0).
+				Background(lipgloss.Color("#181825"))
+
+	logStyle = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("#585b70")).
+			Padding(1, 2).
+			Margin(1, 0).
+			Background(lipgloss.Color("#1e1e2e")).
+			Height(8)
+
+	operationStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#94e2d5")).
+			PaddingLeft(2)
+
+	progressBarStyle = lipgloss.NewStyle().
 				Margin(1, 0)
 )
 
-// Icons
+// Nerd Font Icons
 const (
-	IconGit        = "🔗"
-	IconFolder     = "📁"
-	IconSuccess    = "✅"
-	IconError      = "❌"
-	IconInfo       = "ℹ️"
-	IconWarning    = "⚠️"
-	IconCommit     = "📝"
-	IconPush       = "☁️"
-	IconPull       = "⬇️"
-	IconBranch     = "🌿"
-	IconMainBranch = "🌳"
-	IconAdd        = "➕"
-	IconRemove     = "➖"
-	IconClock      = "⏰"
-	IconSparkles   = "✨"
-	IconRocket     = "🚀"
-	IconConfig     = "⚙️"
-	IconCheck      = "✓"
-	IconDot        = "•"
+	IconGit        = ""   // Git branch
+	IconFolder     = ""   // Folder
+	IconSuccess    = ""   // Check circle
+	IconError      = ""   // X circle
+	IconInfo       = ""   // Info circle
+	IconWarning    = ""   // Warning triangle
+	IconCommit     = ""   // Git commit
+	IconPush       = ""   // Upload
+	IconPull       = ""   // Download
+	IconBranch     = ""   // Git branch
+	IconMainBranch = ""   // Tree
+	IconAdd        = ""   // Plus
+	IconRemove     = ""   // Minus
+	IconClock      = ""   // Clock
+	IconSparkles   = ""   // Star
+	IconRocket     = ""   // Rocket
+	IconConfig     = ""   // Gear
+	IconCheck      = ""   // Check
+	IconDot        = ""   // Dot
+	IconSync       = ""   // Sync
+	IconFile       = ""   // File
+	IconTerminal   = ""   // Terminal
+	IconProcess    = ""   // Process
 )
 
-// File type icons
+// File type icons using Nerd Fonts
 func getFileIcon(filename string) string {
 	ext := strings.ToLower(filepath.Ext(filename))
 	switch ext {
 	case ".py":
-		return "🐍"
-	case ".js", ".jsx", ".ts", ".tsx":
-		return "📜"
+		return ""
+	case ".js", ".jsx":
+		return ""
+	case ".ts", ".tsx":
+		return ""
 	case ".html":
-		return "🌐"
+		return ""
 	case ".css":
-		return "🎨"
+		return ""
 	case ".go":
-		return "🐹"
+		return ""
 	case ".json":
-		return "📋"
+		return ""
 	case ".md":
-		return "📝"
+		return ""
 	case ".yml", ".yaml":
-		return "⚙️"
+		return ""
 	case ".png", ".jpg", ".jpeg", ".gif":
-		return "🖼️"
+		return ""
 	case ".mp3", ".wav":
-		return "🎵"
+		return ""
 	case ".mp4", ".mov":
-		return "🎬"
+		return ""
 	case ".zip", ".tar", ".gz":
-		return "📦"
+		return ""
 	default:
-		return "📄"
+		return IconFile
 	}
 }
 
@@ -138,12 +170,22 @@ type Config struct {
 	UseAICommit     bool
 }
 
+// Operation log entry
+type LogEntry struct {
+	Timestamp time.Time
+	Level     string
+	Repo      string
+	Message   string
+	Icon      string
+}
+
 // Repository information
 type Repository struct {
 	Name    string
 	Path    string
 	Branch  string
 	Changes []string
+	Status  string
 }
 
 // Model for Bubble Tea
@@ -156,7 +198,8 @@ type Model struct {
 	progress     progress.Model
 	results      []string
 	startTime    time.Time
-	logs         []string
+	logs         []LogEntry
+	currentOps   []string // Current operations being performed
 }
 
 // Messages
@@ -165,9 +208,17 @@ type scanCompleteMsg struct {
 }
 
 type repoProcessedMsg struct {
-	repo    Repository
-	success bool
-	message string
+	repo       Repository
+	success    bool
+	message    string
+	operations []string
+	logs       []LogEntry
+}
+
+type operationUpdateMsg struct {
+	repo      string
+	operation string
+	success   bool
 }
 
 type allDoneMsg struct{}
@@ -175,9 +226,9 @@ type allDoneMsg struct{}
 func initialModel(config Config) Model {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#f38ba8"))
 
-	p := progress.New(progress.WithDefaultGradient())
+	p := progress.New(progress.WithScaledGradient("#f38ba8", "#a6e3a1"))
 
 	return Model{
 		config:    config,
@@ -185,6 +236,22 @@ func initialModel(config Config) Model {
 		spinner:   s,
 		progress:  p,
 		startTime: time.Now(),
+		logs:      []LogEntry{},
+	}
+}
+
+func (m *Model) addLog(level, repo, message, icon string) {
+	m.logs = append(m.logs, LogEntry{
+		Timestamp: time.Now(),
+		Level:     level,
+		Repo:      repo,
+		Message:   message,
+		Icon:      icon,
+	})
+	
+	// Keep only last 20 log entries
+	if len(m.logs) > 20 {
+		m.logs = m.logs[len(m.logs)-20:]
 	}
 }
 
@@ -206,6 +273,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case scanCompleteMsg:
 		m.repositories = msg.repos
 		m.state = "processing"
+		m.addLog("INFO", "SYSTEM", fmt.Sprintf("Found %d repositories to process", len(msg.repos)), IconInfo)
+		
 		if len(m.repositories) == 0 {
 			m.state = "done"
 			return m, nil
@@ -214,13 +283,20 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, processNextRepository(m.repositories[0], m.config)
 
 	case repoProcessedMsg:
+		// Add logs from processing
+		for _, logEntry := range msg.logs {
+			m.logs = append(m.logs, logEntry)
+		}
+		
 		// Add result to our list
 		if msg.success {
 			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
 				IconSuccess, msg.repo.Name, msg.message))
+			m.addLog("SUCCESS", msg.repo.Name, msg.message, IconSuccess)
 		} else {
 			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
 				IconError, msg.repo.Name, msg.message))
+			m.addLog("ERROR", msg.repo.Name, msg.message, IconError)
 		}
 		
 		m.currentRepo++
@@ -228,6 +304,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Check if we have more repositories to process
 		if m.currentRepo >= len(m.repositories) {
 			m.state = "done"
+			m.addLog("INFO", "SYSTEM", "All repositories processed", IconSparkles)
 			return m, tea.Sequence(tea.Tick(time.Second, func(t time.Time) tea.Msg {
 				return allDoneMsg{}
 			}))
@@ -236,6 +313,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// Process next repository
 		nextRepo := m.repositories[m.currentRepo]
 		return m, processNextRepository(nextRepo, m.config)
+
+	case operationUpdateMsg:
+		if msg.success {
+			m.addLog("INFO", msg.repo, msg.operation, IconCheck)
+		} else {
+			m.addLog("ERROR", msg.repo, msg.operation, IconError)
+		}
 
 	case allDoneMsg:
 		// Final state reached
@@ -257,7 +341,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	var b strings.Builder
 
-	// Header
+	// Header with enhanced styling
 	header := headerStyle.Render(fmt.Sprintf("%s Git Repository Manager %s", 
 		IconRocket, IconSparkles))
 	b.WriteString(header + "\n\n")
@@ -265,41 +349,74 @@ func (m Model) View() string {
 	// Configuration table
 	if m.state == "scanning" || m.state == "processing" {
 		configTable := m.renderConfigTable()
-		b.WriteString(configTable + "\n\n")
+		b.WriteString(configTable + "\n")
 	}
 
 	switch m.state {
 	case "scanning":
-		b.WriteString(fmt.Sprintf("%s Scanning for Git repositories...\n", 
-			m.spinner.View()))
+		scanningMsg := fmt.Sprintf("%s %s Scanning for Git repositories...", 
+			m.spinner.View(), IconFolder)
+		b.WriteString(infoStyle.Render(scanningMsg) + "\n\n")
 
 	case "processing":
 		if len(m.repositories) > 0 {
 			progressPercent := float64(m.currentRepo) / float64(len(m.repositories))
-			b.WriteString(fmt.Sprintf("Processing repositories: %d/%d\n", 
-				m.currentRepo, len(m.repositories)))
-			b.WriteString(m.progress.ViewAs(progressPercent) + "\n\n")
+			
+			// Progress section
+			progressHeader := titleStyle.Render(fmt.Sprintf("%s Processing Progress", IconProcess))
+			b.WriteString(progressHeader + "\n")
+			
+			progressInfo := fmt.Sprintf("Repository %d of %d", 
+				m.currentRepo+1, len(m.repositories))
+			b.WriteString(infoStyle.Render(progressInfo) + "\n")
+			
+			progressBar := progressBarStyle.Render(m.progress.ViewAs(progressPercent))
+			b.WriteString(progressBar + "\n")
 
-			// Show current repository being processed
+			// Current repository being processed
 			if m.currentRepo < len(m.repositories) {
 				currentRepo := m.repositories[m.currentRepo]
-				repoInfo := repoStyle.Render(fmt.Sprintf("%s %s\n%s Branch: %s", 
+				repoHeader := fmt.Sprintf("%s Currently Processing", IconTerminal)
+				repoInfo := fmt.Sprintf("%s %s\n%s Branch: %s\n%s Status: Processing...", 
 					IconFolder, currentRepo.Name, 
-					IconBranch, branchStyle.Render(currentRepo.Branch)))
-				b.WriteString(repoInfo + "\n")
+					IconBranch, branchStyle.Render(currentRepo.Branch),
+					IconSync)
+				
+				currentRepoBox := currentRepoStyle.Render(repoHeader + "\n" + repoInfo)
+				b.WriteString(currentRepoBox + "\n")
 			}
 			
-			// Show completed results so far
+			// Recent logs
+			if len(m.logs) > 0 {
+				logsSection := m.renderLogs()
+				b.WriteString(logsSection + "\n")
+			}
+			
+			// Show completed results
 			if len(m.results) > 0 {
-				b.WriteString("\nCompleted:\n")
-				for _, result := range m.results {
-					b.WriteString(result + "\n")
+				completedHeader := titleStyle.Render(fmt.Sprintf("%s Completed Repositories", IconCheck))
+				b.WriteString(completedHeader + "\n")
+				
+				// Show only last 5 completed results to save space
+				start := 0
+				if len(m.results) > 5 {
+					start = len(m.results) - 5
+				}
+				
+				for i := start; i < len(m.results); i++ {
+					result := m.results[i]
+					b.WriteString(operationStyle.Render(result) + "\n")
+				}
+				
+				if len(m.results) > 5 {
+					moreCount := len(m.results) - 5
+					b.WriteString(statusStyle.Render(fmt.Sprintf("... and %d more", moreCount)) + "\n")
 				}
 			}
 		}
 
 	case "done":
-		// Summary
+		// Summary with enhanced styling
 		elapsed := time.Since(m.startTime)
 		successCount := 0
 		for _, result := range m.results {
@@ -308,25 +425,43 @@ func (m Model) View() string {
 			}
 		}
 
-		summary := fmt.Sprintf("%s Processing Complete!\n", IconSparkles)
-		summary += fmt.Sprintf("Successfully processed: %d/%d repositories\n", 
-			successCount, len(m.repositories))
-		summary += fmt.Sprintf("%s Total time: %.2f seconds\n", 
-			IconClock, elapsed.Seconds())
+		summaryHeader := titleStyle.Render(fmt.Sprintf("%s Processing Complete!", IconSparkles))
+		b.WriteString(summaryHeader + "\n")
 
-		if successCount == len(m.repositories) {
-			b.WriteString(successStyle.Render(summary) + "\n\n")
-		} else {
-			b.WriteString(warningStyle.Render(summary) + "\n\n")
+		stats := []string{
+			fmt.Sprintf("%s Successfully processed: %d/%d repositories", 
+				IconSuccess, successCount, len(m.repositories)),
+			fmt.Sprintf("%s Total time: %.2f seconds", 
+				IconClock, elapsed.Seconds()),
+			fmt.Sprintf("%s Total operations logged: %d", 
+				IconTerminal, len(m.logs)),
 		}
 
-		// Show results
+		for _, stat := range stats {
+			if successCount == len(m.repositories) {
+				b.WriteString(successStyle.Render(stat) + "\n")
+			} else {
+				b.WriteString(warningStyle.Render(stat) + "\n")
+			}
+		}
+		b.WriteString("\n")
+
+		// Final results
+		resultsHeader := titleStyle.Render(fmt.Sprintf("%s Final Results", IconCheck))
+		b.WriteString(resultsHeader + "\n")
+		
 		for _, result := range m.results {
-			b.WriteString(result + "\n")
+			b.WriteString(operationStyle.Render(result) + "\n")
+		}
+
+		// Final logs
+		if len(m.logs) > 0 {
+			finalLogsSection := m.renderLogs()
+			b.WriteString("\n" + finalLogsSection)
 		}
 	}
 
-	b.WriteString("\n" + statusStyle.Render("Press 'q' or Ctrl+C to quit"))
+	b.WriteString("\n" + statusStyle.Render(fmt.Sprintf("%s Press 'q' or Ctrl+C to quit", IconInfo)))
 
 	return b.String()
 }
@@ -334,27 +469,74 @@ func (m Model) View() string {
 func (m Model) renderConfigTable() string {
 	var table strings.Builder
 
-	table.WriteString(titleStyle.Render("Configuration") + "\n")
-	table.WriteString(fmt.Sprintf("Base Directory: %s\n", m.config.BaseDir))
-	table.WriteString(fmt.Sprintf("Pull Changes: %s\n", boolToYesNo(m.config.Pull)))
-	table.WriteString(fmt.Sprintf("Handle .gitignore: %s\n", boolToYesNo(m.config.HandleGitignore)))
-	table.WriteString(fmt.Sprintf("Remove .DS_Store: %s\n", boolToYesNo(m.config.RemoveDSStore)))
-	table.WriteString(fmt.Sprintf("Using AI Commit: %s\n", boolToYesNo(m.config.UseAICommit)))
+	configHeader := titleStyle.Render(fmt.Sprintf("%s Configuration", IconConfig))
+	table.WriteString(configHeader + "\n")
+	
+	configItems := []string{
+		fmt.Sprintf("%s Base Directory: %s", IconFolder, m.config.BaseDir),
+		fmt.Sprintf("%s Pull Changes: %s", IconPull, boolToYesNo(m.config.Pull)),
+		fmt.Sprintf("%s Handle .gitignore: %s", IconFile, boolToYesNo(m.config.HandleGitignore)),
+		fmt.Sprintf("%s Remove .DS_Store: %s", IconRemove, boolToYesNo(m.config.RemoveDSStore)),
+		fmt.Sprintf("%s Using AI Commit: %s", IconSparkles, boolToYesNo(m.config.UseAICommit)),
+	}
 	
 	commitMsg := m.config.CommitMessage
 	if commitMsg == "auto-commit" {
 		commitMsg = "AI Generated"
 	}
-	table.WriteString(fmt.Sprintf("Commit Message: %s\n", commitMsg))
+	configItems = append(configItems, fmt.Sprintf("%s Commit Message: %s", IconCommit, commitMsg))
 
 	if len(m.config.ExcludeList) > 0 {
-		table.WriteString(fmt.Sprintf("Excluded: %s\n", strings.Join(m.config.ExcludeList, ", ")))
+		configItems = append(configItems, fmt.Sprintf("%s Excluded: %s", IconRemove, strings.Join(m.config.ExcludeList, ", ")))
 	}
 	if len(m.config.OnlyList) > 0 {
-		table.WriteString(fmt.Sprintf("Including Only: %s\n", strings.Join(m.config.OnlyList, ", ")))
+		configItems = append(configItems, fmt.Sprintf("%s Including Only: %s", IconAdd, strings.Join(m.config.OnlyList, ", ")))
+	}
+
+	for _, item := range configItems {
+		table.WriteString(item + "\n")
 	}
 
 	return configTableStyle.Render(table.String())
+}
+
+func (m Model) renderLogs() string {
+	if len(m.logs) == 0 {
+		return ""
+	}
+
+	var logContent strings.Builder
+	logHeader := titleStyle.Render(fmt.Sprintf("%s Recent Activity", IconTerminal))
+	logContent.WriteString(logHeader + "\n")
+
+	// Show last 10 logs
+	start := 0
+	if len(m.logs) > 10 {
+		start = len(m.logs) - 10
+	}
+
+	for i := start; i < len(m.logs); i++ {
+		entry := m.logs[i]
+		timestamp := entry.Timestamp.Format("15:04:05")
+		
+		var style lipgloss.Style
+		switch entry.Level {
+		case "SUCCESS":
+			style = successStyle
+		case "ERROR":
+			style = errorStyle
+		case "WARNING":
+			style = warningStyle
+		default:
+			style = infoStyle
+		}
+		
+		logLine := fmt.Sprintf("[%s] %s %s: %s", 
+			timestamp, entry.Icon, entry.Repo, entry.Message)
+		logContent.WriteString(style.Render(logLine) + "\n")
+	}
+
+	return logStyle.Render(logContent.String())
 }
 
 func boolToYesNo(b bool) string {
@@ -402,6 +584,7 @@ func scanRepositories(config Config) tea.Cmd {
 					Name:   name,
 					Path:   repoPath,
 					Branch: branch,
+					Status: "pending",
 				}
 				repos = append(repos, repo)
 			}
@@ -418,94 +601,143 @@ func scanRepositories(config Config) tea.Cmd {
 // New function to process repositories one at a time
 func processNextRepository(repo Repository, config Config) tea.Cmd {
 	return func() tea.Msg {
-		success, message := processRepository(repo, config)
+		success, message, operations, logs := processRepositoryWithLogs(repo, config)
 		return repoProcessedMsg{
-			repo:    repo,
-			success: success,
-			message: message,
+			repo:       repo,
+			success:    success,
+			message:    message,
+			operations: operations,
+			logs:       logs,
 		}
 	}
 }
 
-func processRepository(repo Repository, config Config) (bool, string) {
+func processRepositoryWithLogs(repo Repository, config Config) (bool, string, []string, []LogEntry) {
+	var logs []LogEntry
+	var operations []string
+	
+	addLog := func(level, message, icon string) {
+		logs = append(logs, LogEntry{
+			Timestamp: time.Now(),
+			Level:     level,
+			Repo:      repo.Name,
+			Message:   message,
+			Icon:      icon,
+		})
+	}
+	
+	addLog("INFO", "Starting repository processing", IconProcess)
+	
 	// Change to repository directory
 	originalDir, _ := os.Getwd()
 	defer os.Chdir(originalDir)
 	
 	if err := os.Chdir(repo.Path); err != nil {
-		return false, fmt.Sprintf("Failed to change directory: %v", err)
+		addLog("ERROR", fmt.Sprintf("Failed to change directory: %v", err), IconError)
+		return false, fmt.Sprintf("Failed to change directory: %v", err), operations, logs
 	}
-
-	var operations []string
+	
+	addLog("INFO", fmt.Sprintf("Changed to directory: %s", repo.Path), IconFolder)
 
 	// Pull changes if requested
 	if config.Pull {
+		addLog("INFO", "Pulling changes from remote", IconPull)
 		if err := runGitCommand("pull"); err != nil {
-			return false, fmt.Sprintf("Failed to pull: %v", err)
+			addLog("ERROR", fmt.Sprintf("Failed to pull: %v", err), IconError)
+			return false, fmt.Sprintf("Failed to pull: %v", err), operations, logs
 		}
 		operations = append(operations, "pulled changes")
+		addLog("SUCCESS", "Successfully pulled changes", IconSuccess)
 	}
 
 	// Handle .gitignore
 	if config.HandleGitignore {
+		addLog("INFO", "Updating .gitignore file", IconFile)
 		if err := ensureGitignoreHasDSStore(repo.Path); err != nil {
-			return false, fmt.Sprintf("Failed to update .gitignore: %v", err)
+			addLog("ERROR", fmt.Sprintf("Failed to update .gitignore: %v", err), IconError)
+			return false, fmt.Sprintf("Failed to update .gitignore: %v", err), operations, logs
 		}
 		operations = append(operations, "updated .gitignore")
+		addLog("SUCCESS", "Successfully updated .gitignore", IconSuccess)
 	}
 
 	// Remove .DS_Store files
 	if config.RemoveDSStore {
+		addLog("INFO", "Searching for .DS_Store files", IconRemove)
 		count, err := removeDSStoreFiles(repo.Path)
 		if err != nil {
-			return false, fmt.Sprintf("Failed to remove .DS_Store files: %v", err)
+			addLog("ERROR", fmt.Sprintf("Failed to remove .DS_Store files: %v", err), IconError)
+			return false, fmt.Sprintf("Failed to remove .DS_Store files: %v", err), operations, logs
 		}
 		if count > 0 {
 			operations = append(operations, fmt.Sprintf("removed %d .DS_Store files", count))
+			addLog("SUCCESS", fmt.Sprintf("Removed %d .DS_Store files", count), IconSuccess)
+		} else {
+			addLog("INFO", "No .DS_Store files found", IconCheck)
 		}
 	}
 
 	// Check for changes
+	addLog("INFO", "Checking for uncommitted changes", IconSync)
 	hasChanges, err := hasUncommittedChanges()
 	if err != nil {
-		return false, fmt.Sprintf("Failed to check for changes: %v", err)
+		addLog("ERROR", fmt.Sprintf("Failed to check for changes: %v", err), IconError)
+		return false, fmt.Sprintf("Failed to check for changes: %v", err), operations, logs
 	}
 
 	if !hasChanges {
-		return true, "No changes to commit"
+		addLog("INFO", "No changes to commit", IconCheck)
+		return true, "No changes to commit", operations, logs
 	}
 
+	addLog("INFO", "Found uncommitted changes", IconCommit)
+
 	// Stage changes
+	addLog("INFO", "Staging changes", IconAdd)
 	if err := runGitCommand("add", "."); err != nil {
-		return false, fmt.Sprintf("Failed to stage changes: %v", err)
+		addLog("ERROR", fmt.Sprintf("Failed to stage changes: %v", err), IconError)
+		return false, fmt.Sprintf("Failed to stage changes: %v", err), operations, logs
 	}
+	addLog("SUCCESS", "Successfully staged changes", IconSuccess)
 
 	// Commit changes
 	commitMessage := config.CommitMessage
 	if commitMessage == "auto-commit" {
 		commitMessage = generateCommitMessage()
+		addLog("INFO", fmt.Sprintf("Generated commit message: %s", commitMessage), IconSparkles)
 	}
 
 	if config.UseAICommit {
+		addLog("INFO", "Using AI commit command", IconSparkles)
 		// Use ai_commit command
 		cmd := exec.Command("ai_commit", commitMessage)
 		if err := cmd.Run(); err != nil {
-			return false, fmt.Sprintf("ai_commit failed: %v", err)
+			addLog("ERROR", fmt.Sprintf("ai_commit failed: %v", err), IconError)
+			return false, fmt.Sprintf("ai_commit failed: %v", err), operations, logs
 		}
+		addLog("SUCCESS", "AI commit completed successfully", IconSuccess)
 	} else {
 		// Manual commit
+		addLog("INFO", "Committing changes", IconCommit)
 		if err := runGitCommand("commit", "-m", commitMessage); err != nil {
-			return false, fmt.Sprintf("Failed to commit: %v", err)
+			addLog("ERROR", fmt.Sprintf("Failed to commit: %v", err), IconError)
+			return false, fmt.Sprintf("Failed to commit: %v", err), operations, logs
 		}
+		addLog("SUCCESS", "Successfully committed changes", IconSuccess)
 
 		// Push changes
+		addLog("INFO", "Pushing changes to remote", IconPush)
 		if err := runGitCommand("push"); err != nil {
-			return false, fmt.Sprintf("Failed to push: %v", err)
+			addLog("ERROR", fmt.Sprintf("Failed to push: %v", err), IconError)
+			return false, fmt.Sprintf("Failed to push: %v", err), operations, logs
 		}
+		addLog("SUCCESS", "Successfully pushed changes", IconSuccess)
 	}
 
 	operations = append(operations, "committed and pushed changes")
-	return true, strings.Join(operations, ", ")
+	addLog("SUCCESS", "Repository processing completed", IconSparkles)
+	
+	return true, strings.Join(operations, ", "), operations, logs
 }
 
 // Helper functions
