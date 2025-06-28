@@ -210,10 +210,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = "done"
 			return m, nil
 		}
-		return m, processAllRepositories(m.repositories, m.config)
+		// Start processing the first repository
+		return m, processNextRepository(m.repositories[0], m.config)
 
 	case repoProcessedMsg:
-		m.currentRepo++
+		// Add result to our list
 		if msg.success {
 			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
 				IconSuccess, msg.repo.Name, msg.message))
@@ -222,12 +223,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				IconError, msg.repo.Name, msg.message))
 		}
 		
+		m.currentRepo++
+		
+		// Check if we have more repositories to process
 		if m.currentRepo >= len(m.repositories) {
 			m.state = "done"
 			return m, tea.Sequence(tea.Tick(time.Second, func(t time.Time) tea.Msg {
 				return allDoneMsg{}
 			}))
 		}
+		
+		// Process next repository
+		nextRepo := m.repositories[m.currentRepo]
+		return m, processNextRepository(nextRepo, m.config)
 
 	case allDoneMsg:
 		// Final state reached
@@ -279,6 +287,14 @@ func (m Model) View() string {
 					IconFolder, currentRepo.Name, 
 					IconBranch, branchStyle.Render(currentRepo.Branch)))
 				b.WriteString(repoInfo + "\n")
+			}
+			
+			// Show completed results so far
+			if len(m.results) > 0 {
+				b.WriteString("\nCompleted:\n")
+				for _, result := range m.results {
+					b.WriteString(result + "\n")
+				}
 			}
 		}
 
@@ -399,16 +415,15 @@ func scanRepositories(config Config) tea.Cmd {
 	}
 }
 
-func processAllRepositories(repos []Repository, config Config) tea.Cmd {
+// New function to process repositories one at a time
+func processNextRepository(repo Repository, config Config) tea.Cmd {
 	return func() tea.Msg {
-		for _, repo := range repos {
-			success, message := processRepository(repo, config)
-			// In a real implementation, we'd send individual messages
-			// For simplicity, we'll process all at once
-			_ = success
-			_ = message
+		success, message := processRepository(repo, config)
+		return repoProcessedMsg{
+			repo:    repo,
+			success: success,
+			message: message,
 		}
-		return allDoneMsg{}
 	}
 }
 
