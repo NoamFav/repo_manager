@@ -1,10 +1,10 @@
 package dashboard
 
 import (
-	"encoding/json"
-	"github.com/muesli/reflow/wordwrap"
-	"os/exec"
+	"fmt"
 	"strings"
+
+	"github.com/muesli/reflow/wordwrap"
 
 	"github.com/NoamFav/Zvezda/src/repo_manager"
 	tea "github.com/charmbracelet/bubbletea"
@@ -27,32 +27,32 @@ func NewRepoModel() RepoModel {
 			repos: []repo_manager.Repo{
 				{
 					Name:            "iris",
-					Desc:            "AI Assistant",
+					Description:     "AI Assistant",
 					PrimaryLanguage: repo_manager.Language{Name: "go/python"},
 				},
 				{
 					Name:            "zvezda",
-					Desc:            "Repo Manager",
+					Description:     "Repo Manager",
 					PrimaryLanguage: repo_manager.Language{Name: "go"},
 				},
 				{
 					Name:            "enron_classifier",
-					Desc:            "NLP Classifier",
+					Description:     "NLP Classifier",
 					PrimaryLanguage: repo_manager.Language{Name: "python/js"},
 				},
 				{
 					Name:            "shadowedHunter",
-					Desc:            "Stealth Game",
+					Description:     "Stealth Game",
 					PrimaryLanguage: repo_manager.Language{Name: "C#"},
 				},
 				{
 					Name:            "apple_music",
-					Desc:            "neovim Plugin",
+					Description:     "neovim Plugin",
 					PrimaryLanguage: repo_manager.Language{Name: "lua"},
 				},
 				{
 					Name:            "bitvoyager",
-					Desc:            "learning app",
+					Description:     "learning app",
 					PrimaryLanguage: repo_manager.Language{Name: "js"},
 				},
 			},
@@ -91,12 +91,12 @@ func (m RepoModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m RepoModel) View() string {
-	var b strings.Builder
-	title := lipgloss.NewStyle().
-		Padding(0, 1).
-		Render(TitleStyle.Render("Repositories"))
-
-	b.WriteString(title + "\n\n")
+	var (
+		renderedCards     []string
+		cardHeights       []int
+		repoIndices       []int
+		selectedCardIndex = -1
+	)
 
 	for i := m.index - 2; i <= m.index+2; i++ {
 		if i < 0 || i >= len(m.repos) {
@@ -104,49 +104,95 @@ func (m RepoModel) View() string {
 		}
 
 		repo := m.repos[i]
-		var style lipgloss.Style
-
+		style := RepoHidden
 		switch {
 		case i == m.index:
 			style = RepoCard100
+			selectedCardIndex = len(renderedCards)
 		case i == m.index-1 || i == m.index+1:
 			style = RepoCard75
 		case i == m.index-2 || i == m.index+2:
 			style = RepoCard50
-		default:
-			style = RepoHidden
 		}
 
-		width := 40
-
+		// Data fallbacks
 		lang := "N/A"
 		if repo.PrimaryLanguage.Name != "" {
 			lang = repo.PrimaryLanguage.Name
 		}
 
-		card := style.Render(TitleStyle.Render(repo.Name) + "\n" + truncateDesc(repo.Desc, 36, 1) + "\n" + lang)
-		centered := lipgloss.PlaceHorizontal(width, lipgloss.Center, card)
-		b.WriteString(centered + "\n")
+		license := "No license"
+		if repo.LicenseInfo.Name != "" {
+			license = repo.LicenseInfo.Name
+		}
+
+		// Icons and metadata
+		desc := truncateDesc(repo.Description, 36, 1)
+		stars := fmt.Sprintf("󰓎 %d", repo.StargazerCount)
+		forks := fmt.Sprintf("󰓂 %d", repo.ForkCount)
+		watchers := fmt.Sprintf("  %d", repo.Watchers.TotalCount)
+
+		visIcon := "󰹇"
+		if repo.Visibility == "PRIVATE" {
+			visIcon = "󱠱"
+		}
+		vis := fmt.Sprintf("%s %s", visIcon, repo.Visibility)
+
+		metaLine := fmt.Sprintf("󰗀 %s  •  󰿃 %s  •  %s", lang, license, vis)
+		countsLine := fmt.Sprintf("%s  %s  %s", stars, forks, watchers)
+		title := TitleStyle.Render(" " + repo.Name)
+
+		card := style.Render(fmt.Sprintf("%s\n%s\n%s\n%s", title, desc, metaLine, countsLine))
+		centeredCard := lipgloss.PlaceHorizontal(RepoCard100.GetWidth(), lipgloss.Center, card)
+
+		renderedCards = append(renderedCards, centeredCard)
+		cardHeights = append(cardHeights, lipgloss.Height(centeredCard))
+		repoIndices = append(repoIndices, i)
 	}
 
-	cardsRendered := b.String()
-	centered := lipgloss.PlaceVertical(m.windowHeight, lipgloss.Center, cardsRendered)
-	return PanelStyle.Render(centered)
-}
-
-func FetchGithubRepos() ([]repo_manager.Repo, error) {
-	cmd := exec.Command("gh", "repo", "list", "--limit", "100", "--json", "name,description,language")
-	out, err := cmd.Output()
-	if err != nil {
-		return nil, err
+	if len(renderedCards) == 0 || selectedCardIndex == -1 {
+		return PanelStyle.Render("N/A")
 	}
 
-	var repos []repo_manager.Repo
-	err = json.Unmarshal(out, &repos)
-	if err != nil {
-		return nil, err
+	// Vertical centering
+	selectedCardHeight := cardHeights[selectedCardIndex]
+	centerLine := m.windowHeight / 2
+	selectedCardStart := centerLine - (selectedCardHeight / 2) + 1
+
+	finalLines := make([]string, m.windowHeight)
+	for i, card := range renderedCards {
+		var cardStart int
+		if i == selectedCardIndex {
+			cardStart = selectedCardStart
+		} else {
+			spacing := 1
+			offset := i - selectedCardIndex
+			if offset < 0 {
+				cardStart = selectedCardStart
+				for j := selectedCardIndex - 1; j >= i; j-- {
+					cardStart -= (cardHeights[j] + spacing)
+				}
+			} else {
+				cardStart = selectedCardStart + selectedCardHeight + spacing
+				for j := selectedCardIndex + 1; j < i; j++ {
+					cardStart += (cardHeights[j] + spacing)
+				}
+			}
+		}
+
+		for j, line := range strings.Split(card, "\n") {
+			linePos := cardStart + j
+			if linePos >= 0 && linePos < len(finalLines) {
+				finalLines[linePos] = line
+			}
+		}
 	}
-	return repos, nil
+
+	var result strings.Builder
+	for _, line := range finalLines {
+		result.WriteString(line + "\n")
+	}
+	return result.String()
 }
 
 func truncateDesc(desc string, maxWidth int, maxLines int) string {
