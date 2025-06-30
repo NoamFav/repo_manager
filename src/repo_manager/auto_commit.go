@@ -1,4 +1,4 @@
-package main
+package repo_manager
 
 import (
 	"fmt"
@@ -98,29 +98,29 @@ var (
 
 // Nerd Font Icons
 const (
-	IconGit        = ""   // Git branch
-	IconFolder     = ""   // Folder
-	IconSuccess    = ""   // Check circle
-	IconError      = ""   // X circle
-	IconInfo       = ""   // Info circle
-	IconWarning    = ""   // Warning triangle
-	IconCommit     = ""   // Git commit
-	IconPush       = ""   // Upload
-	IconPull       = ""   // Download
-	IconBranch     = ""   // Git branch
-	IconMainBranch = ""   // Tree
-	IconAdd        = ""   // Plus
-	IconRemove     = ""   // Minus
-	IconClock      = ""   // Clock
-	IconSparkles   = ""   // Star
-	IconRocket     = ""   // Rocket
-	IconConfig     = ""   // Gear
-	IconCheck      = ""   // Check
-	IconDot        = ""   // Dot
-	IconSync       = ""   // Sync
-	IconFile       = ""   // File
-	IconTerminal   = ""   // Terminal
-	IconProcess    = ""   // Process
+	IconGit        = "" // Git branch
+	IconFolder     = "" // Folder
+	IconSuccess    = "" // Check circle
+	IconError      = "" // X circle
+	IconInfo       = "" // Info circle
+	IconWarning    = "" // Warning triangle
+	IconCommit     = "" // Git commit
+	IconPush       = "" // Upload
+	IconPull       = "" // Download
+	IconBranch     = "" // Git branch
+	IconMainBranch = "" // Tree
+	IconAdd        = "" // Plus
+	IconRemove     = "" // Minus
+	IconClock      = "" // Clock
+	IconSparkles   = "" // Star
+	IconRocket     = "" // Rocket
+	IconConfig     = "" // Gear
+	IconCheck      = "" // Check
+	IconDot        = "" // Dot
+	IconSync       = "" // Sync
+	IconFile       = "" // File
+	IconTerminal   = "" // Terminal
+	IconProcess    = "" // Process
 )
 
 // File type icons using Nerd Fonts
@@ -248,7 +248,7 @@ func (m *Model) addLog(level, repo, message, icon string) {
 		Message:   message,
 		Icon:      icon,
 	})
-	
+
 	// Keep only last 20 log entries
 	if len(m.logs) > 20 {
 		m.logs = m.logs[len(m.logs)-20:]
@@ -274,7 +274,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.repositories = msg.repos
 		m.state = "processing"
 		m.addLog("INFO", "SYSTEM", fmt.Sprintf("Found %d repositories to process", len(msg.repos)), IconInfo)
-		
+
 		if len(m.repositories) == 0 {
 			m.state = "done"
 			return m, nil
@@ -287,20 +287,20 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		for _, logEntry := range msg.logs {
 			m.logs = append(m.logs, logEntry)
 		}
-		
+
 		// Add result to our list
 		if msg.success {
-			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
+			m.results = append(m.results, fmt.Sprintf("%s %s: %s",
 				IconSuccess, msg.repo.Name, msg.message))
 			m.addLog("SUCCESS", msg.repo.Name, msg.message, IconSuccess)
 		} else {
-			m.results = append(m.results, fmt.Sprintf("%s %s: %s", 
+			m.results = append(m.results, fmt.Sprintf("%s %s: %s",
 				IconError, msg.repo.Name, msg.message))
 			m.addLog("ERROR", msg.repo.Name, msg.message, IconError)
 		}
-		
+
 		m.currentRepo++
-		
+
 		// Check if we have more repositories to process
 		if m.currentRepo >= len(m.repositories) {
 			m.state = "done"
@@ -309,7 +309,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return allDoneMsg{}
 			}))
 		}
-		
+
 		// Process next repository
 		nextRepo := m.repositories[m.currentRepo]
 		return m, processNextRepository(nextRepo, m.config)
@@ -342,7 +342,7 @@ func (m Model) View() string {
 	var b strings.Builder
 
 	// Header with enhanced styling
-	header := headerStyle.Render(fmt.Sprintf("%s Git Repository Manager %s", 
+	header := headerStyle.Render(fmt.Sprintf("%s Git Repository Manager %s",
 		IconRocket, IconSparkles))
 	b.WriteString(header + "\n\n")
 
@@ -354,22 +354,22 @@ func (m Model) View() string {
 
 	switch m.state {
 	case "scanning":
-		scanningMsg := fmt.Sprintf("%s %s Scanning for Git repositories...", 
+		scanningMsg := fmt.Sprintf("%s %s Scanning for Git repositories...",
 			m.spinner.View(), IconFolder)
 		b.WriteString(infoStyle.Render(scanningMsg) + "\n\n")
 
 	case "processing":
 		if len(m.repositories) > 0 {
 			progressPercent := float64(m.currentRepo) / float64(len(m.repositories))
-			
+
 			// Progress section
 			progressHeader := titleStyle.Render(fmt.Sprintf("%s Processing Progress", IconProcess))
 			b.WriteString(progressHeader + "\n")
-			
-			progressInfo := fmt.Sprintf("Repository %d of %d", 
+
+			progressInfo := fmt.Sprintf("Repository %d of %d",
 				m.currentRepo+1, len(m.repositories))
 			b.WriteString(infoStyle.Render(progressInfo) + "\n")
-			
+
 			progressBar := progressBarStyle.Render(m.progress.ViewAs(progressPercent))
 			b.WriteString(progressBar + "\n")
 
@@ -377,37 +377,37 @@ func (m Model) View() string {
 			if m.currentRepo < len(m.repositories) {
 				currentRepo := m.repositories[m.currentRepo]
 				repoHeader := fmt.Sprintf("%s Currently Processing", IconTerminal)
-				repoInfo := fmt.Sprintf("%s %s\n%s Branch: %s\n%s Status: Processing...", 
-					IconFolder, currentRepo.Name, 
+				repoInfo := fmt.Sprintf("%s %s\n%s Branch: %s\n%s Status: Processing...",
+					IconFolder, currentRepo.Name,
 					IconBranch, branchStyle.Render(currentRepo.Branch),
 					IconSync)
-				
+
 				currentRepoBox := currentRepoStyle.Render(repoHeader + "\n" + repoInfo)
 				b.WriteString(currentRepoBox + "\n")
 			}
-			
+
 			// Recent logs
 			if len(m.logs) > 0 {
 				logsSection := m.renderLogs()
 				b.WriteString(logsSection + "\n")
 			}
-			
+
 			// Show completed results
 			if len(m.results) > 0 {
 				completedHeader := titleStyle.Render(fmt.Sprintf("%s Completed Repositories", IconCheck))
 				b.WriteString(completedHeader + "\n")
-				
+
 				// Show only last 5 completed results to save space
 				start := 0
 				if len(m.results) > 5 {
 					start = len(m.results) - 5
 				}
-				
+
 				for i := start; i < len(m.results); i++ {
 					result := m.results[i]
 					b.WriteString(operationStyle.Render(result) + "\n")
 				}
-				
+
 				if len(m.results) > 5 {
 					moreCount := len(m.results) - 5
 					b.WriteString(statusStyle.Render(fmt.Sprintf("... and %d more", moreCount)) + "\n")
@@ -429,11 +429,11 @@ func (m Model) View() string {
 		b.WriteString(summaryHeader + "\n")
 
 		stats := []string{
-			fmt.Sprintf("%s Successfully processed: %d/%d repositories", 
+			fmt.Sprintf("%s Successfully processed: %d/%d repositories",
 				IconSuccess, successCount, len(m.repositories)),
-			fmt.Sprintf("%s Total time: %.2f seconds", 
+			fmt.Sprintf("%s Total time: %.2f seconds",
 				IconClock, elapsed.Seconds()),
-			fmt.Sprintf("%s Total operations logged: %d", 
+			fmt.Sprintf("%s Total operations logged: %d",
 				IconTerminal, len(m.logs)),
 		}
 
@@ -449,7 +449,7 @@ func (m Model) View() string {
 		// Final results
 		resultsHeader := titleStyle.Render(fmt.Sprintf("%s Final Results", IconCheck))
 		b.WriteString(resultsHeader + "\n")
-		
+
 		for _, result := range m.results {
 			b.WriteString(operationStyle.Render(result) + "\n")
 		}
@@ -471,7 +471,7 @@ func (m Model) renderConfigTable() string {
 
 	configHeader := titleStyle.Render(fmt.Sprintf("%s Configuration", IconConfig))
 	table.WriteString(configHeader + "\n")
-	
+
 	configItems := []string{
 		fmt.Sprintf("%s Base Directory: %s", IconFolder, m.config.BaseDir),
 		fmt.Sprintf("%s Pull Changes: %s", IconPull, boolToYesNo(m.config.Pull)),
@@ -479,7 +479,7 @@ func (m Model) renderConfigTable() string {
 		fmt.Sprintf("%s Remove .DS_Store: %s", IconRemove, boolToYesNo(m.config.RemoveDSStore)),
 		fmt.Sprintf("%s Using AI Commit: %s", IconSparkles, boolToYesNo(m.config.UseAICommit)),
 	}
-	
+
 	commitMsg := m.config.CommitMessage
 	if commitMsg == "auto-commit" {
 		commitMsg = "AI Generated"
@@ -518,7 +518,7 @@ func (m Model) renderLogs() string {
 	for i := start; i < len(m.logs); i++ {
 		entry := m.logs[i]
 		timestamp := entry.Timestamp.Format("15:04:05")
-		
+
 		var style lipgloss.Style
 		switch entry.Level {
 		case "SUCCESS":
@@ -530,8 +530,8 @@ func (m Model) renderLogs() string {
 		default:
 			style = infoStyle
 		}
-		
-		logLine := fmt.Sprintf("[%s] %s %s: %s", 
+
+		logLine := fmt.Sprintf("[%s] %s %s: %s",
 			timestamp, entry.Icon, entry.Repo, entry.Message)
 		logContent.WriteString(style.Render(logLine) + "\n")
 	}
@@ -562,12 +562,12 @@ func scanRepositories(config Config) tea.Cmd {
 			}
 
 			name := entry.Name()
-			
+
 			// Check exclusions
 			if contains(config.ExcludeList, name) {
 				continue
 			}
-			
+
 			// Check only list
 			if len(config.OnlyList) > 0 && !contains(config.OnlyList, name) {
 				continue
@@ -575,11 +575,11 @@ func scanRepositories(config Config) tea.Cmd {
 
 			repoPath := filepath.Join(config.BaseDir, name)
 			gitPath := filepath.Join(repoPath, ".git")
-			
+
 			if _, err := os.Stat(gitPath); err == nil {
 				// Get current branch
 				branch := getCurrentBranch(repoPath)
-				
+
 				repo := Repository{
 					Name:   name,
 					Path:   repoPath,
@@ -615,7 +615,7 @@ func processNextRepository(repo Repository, config Config) tea.Cmd {
 func processRepositoryWithLogs(repo Repository, config Config) (bool, string, []string, []LogEntry) {
 	var logs []LogEntry
 	var operations []string
-	
+
 	addLog := func(level, message, icon string) {
 		logs = append(logs, LogEntry{
 			Timestamp: time.Now(),
@@ -625,18 +625,18 @@ func processRepositoryWithLogs(repo Repository, config Config) (bool, string, []
 			Icon:      icon,
 		})
 	}
-	
+
 	addLog("INFO", "Starting repository processing", IconProcess)
-	
+
 	// Change to repository directory
 	originalDir, _ := os.Getwd()
 	defer os.Chdir(originalDir)
-	
+
 	if err := os.Chdir(repo.Path); err != nil {
 		addLog("ERROR", fmt.Sprintf("Failed to change directory: %v", err), IconError)
 		return false, fmt.Sprintf("Failed to change directory: %v", err), operations, logs
 	}
-	
+
 	addLog("INFO", fmt.Sprintf("Changed to directory: %s", repo.Path), IconFolder)
 
 	// Pull changes if requested
@@ -736,7 +736,7 @@ func processRepositoryWithLogs(repo Repository, config Config) (bool, string, []
 
 	operations = append(operations, "committed and pushed changes")
 	addLog("SUCCESS", "Repository processing completed", IconSparkles)
-	
+
 	return true, strings.Join(operations, ", "), operations, logs
 }
 
@@ -753,15 +753,15 @@ func contains(slice []string, item string) bool {
 func getCurrentBranch(repoPath string) string {
 	originalDir, _ := os.Getwd()
 	defer os.Chdir(originalDir)
-	
+
 	os.Chdir(repoPath)
-	
+
 	cmd := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
 	output, err := cmd.Output()
 	if err != nil {
 		return "unknown"
 	}
-	
+
 	return strings.TrimSpace(string(output))
 }
 
@@ -776,30 +776,30 @@ func hasUncommittedChanges() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	
+
 	return len(strings.TrimSpace(string(output))) > 0, nil
 }
 
 func ensureGitignoreHasDSStore(repoPath string) error {
 	gitignorePath := filepath.Join(repoPath, ".gitignore")
-	
+
 	// Read existing .gitignore or create new one
 	content := ""
 	if data, err := os.ReadFile(gitignorePath); err == nil {
 		content = string(data)
 	}
-	
+
 	// Check if .DS_Store is already in .gitignore
 	if strings.Contains(content, ".DS_Store") {
 		return nil
 	}
-	
+
 	// Add .DS_Store to .gitignore
 	if content != "" && !strings.HasSuffix(content, "\n") {
 		content += "\n"
 	}
 	content += ".DS_Store\n"
-	
+
 	return os.WriteFile(gitignorePath, []byte(content), 0644)
 }
 
@@ -809,7 +809,7 @@ func removeDSStoreFiles(repoPath string) (int, error) {
 		if err != nil {
 			return err
 		}
-		
+
 		if info.Name() == ".DS_Store" {
 			// Remove from git tracking
 			exec.Command("git", "rm", "--cached", path).Run()
@@ -818,10 +818,10 @@ func removeDSStoreFiles(repoPath string) (int, error) {
 				count++
 			}
 		}
-		
+
 		return nil
 	})
-	
+
 	return count, err
 }
 
@@ -830,21 +830,21 @@ func generateCommitMessage() string {
 		"Update", "Enhance", "Fix", "Refactor", "Improve", "Optimize",
 		"Add", "Remove", "Modify", "Restructure", "Clean up",
 	}
-	
+
 	areas := []string{
 		"codebase", "functionality", "structure", "design", "performance",
 		"documentation", "configuration", "dependencies", "features", "UI",
 	}
-	
+
 	details := []string{
 		"for better maintainability", "to improve user experience",
 		"for compatibility with latest standards", "to address technical debt",
 		"for enhanced security", "to optimize resource usage",
 		"based on feedback", "following best practices",
 	}
-	
+
 	rand.Seed(time.Now().UnixNano())
-	
+
 	return fmt.Sprintf("%s %s %s",
 		prefixes[rand.Intn(len(prefixes))],
 		areas[rand.Intn(len(areas))],
@@ -853,25 +853,25 @@ func generateCommitMessage() string {
 
 func main() {
 	var config Config
-	
+
 	// Parse command line flags
-	flag.StringVar(&config.BaseDir, "dir", filepath.Join(os.Getenv("HOME"), "Neoware"), 
+	flag.StringVar(&config.BaseDir, "dir", filepath.Join(os.Getenv("HOME"), "Neoware"),
 		"Base directory containing git repositories")
-	flag.BoolVar(&config.Pull, "pull", false, 
+	flag.BoolVar(&config.Pull, "pull", false,
 		"Pull changes from the remote repository")
-	flag.BoolVar(&config.HandleGitignore, "handle-gitignore", false, 
+	flag.BoolVar(&config.HandleGitignore, "handle-gitignore", false,
 		"Ensure .gitignore includes .DS_Store and update it if necessary")
-	flag.BoolVar(&config.RemoveDSStore, "remove-ds-store", false, 
+	flag.BoolVar(&config.RemoveDSStore, "remove-ds-store", false,
 		"Remove .DS_Store files from the repository")
-	flag.StringVar(&config.CommitMessage, "commit-message", "auto-commit", 
+	flag.StringVar(&config.CommitMessage, "commit-message", "auto-commit",
 		"Commit message to use (or 'auto-commit' for AI-generated messages)")
-	flag.StringSliceVar(&config.ExcludeList, "exclude", []string{}, 
+	flag.StringSliceVar(&config.ExcludeList, "exclude", []string{},
 		"List of directories to exclude")
-	flag.StringSliceVar(&config.OnlyList, "only", []string{}, 
+	flag.StringSliceVar(&config.OnlyList, "only", []string{},
 		"List of directories to include (if empty, include all)")
-	flag.BoolVar(&config.UseAICommit, "use-ai-commit", true, 
+	flag.BoolVar(&config.UseAICommit, "use-ai-commit", true,
 		"Use the ai_commit command")
-	
+
 	flag.Parse()
 
 	// Expand home directory
@@ -881,7 +881,7 @@ func main() {
 
 	// Initialize and run the Bubble Tea program
 	p := tea.NewProgram(initialModel(config), tea.WithAltScreen())
-	
+
 	if _, err := p.Run(); err != nil {
 		log.Fatal("Error running program", "error", err)
 	}
