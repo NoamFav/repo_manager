@@ -5,12 +5,14 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type MainModel struct {
 	windowHeight int
 	windowWidth  int
 	repoModel    RepoModel
+	infoModel    InfoModel
 }
 
 func (m MainModel) Init() tea.Cmd {
@@ -37,13 +39,16 @@ func (m MainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MainModel) View() string {
-	left := m.repoModel.View()
+	sidebar := m.repoModel.View()
+	main_info := m.infoModel.View()
 
-	return left
+	return lipgloss.JoinHorizontal(lipgloss.Top, sidebar, main_info)
 }
 
 func Start() {
-	p := tea.NewProgram(MainModel{repoModel: NewRepoModel()}, tea.WithAltScreen())
+	repo := NewRepoModel()
+	info := NewInfoModel(repo)
+	p := tea.NewProgram(MainModel{repoModel: repo, infoModel: info}, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		fmt.Println("Zvezda crashed:", err)
 		os.Exit(1)

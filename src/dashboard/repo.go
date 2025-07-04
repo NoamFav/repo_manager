@@ -12,8 +12,8 @@ import (
 )
 
 type RepoModel struct {
-	repos        []repo_manager.Repo
-	index        int
+	Repos        []repo_manager.Repo
+	Index        int
 	windowHeight int
 	windowWidth  int
 }
@@ -24,7 +24,7 @@ func NewRepoModel() RepoModel {
 	repos, err := repo_manager.FetchGithubRepos()
 	if err != nil || len(repos) == 0 {
 		return RepoModel{
-			repos: []repo_manager.Repo{
+			Repos: []repo_manager.Repo{
 				{
 					Name:            "iris",
 					Description:     "AI Assistant",
@@ -56,13 +56,13 @@ func NewRepoModel() RepoModel {
 					PrimaryLanguage: repo_manager.Language{Name: "js"},
 				},
 			},
-			index: 2,
+			Index: 2,
 		}
 	}
 
 	return RepoModel{
-		repos: repos,
-		index: 2,
+		Repos: repos,
+		Index: 2,
 	}
 }
 
@@ -77,12 +77,12 @@ func (m RepoModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		switch msg.String() {
 		case "up", "k":
-			if m.index > 0 {
-				m.index--
+			if m.Index > 0 {
+				m.Index--
 			}
 		case "down", "j":
-			if m.index < len(m.repos)-1 {
-				m.index++
+			if m.Index < len(m.Repos)-1 {
+				m.Index++
 			}
 		}
 	}
@@ -98,20 +98,20 @@ func (m RepoModel) View() string {
 		selectedCardIndex = -1
 	)
 
-	for i := m.index - 2; i <= m.index+2; i++ {
-		if i < 0 || i >= len(m.repos) {
+	for i := m.Index - 2; i <= m.Index+2; i++ {
+		if i < 0 || i >= len(m.Repos) {
 			continue
 		}
 
-		repo := m.repos[i]
+		repo := m.Repos[i]
 		style := RepoHidden
 		switch {
-		case i == m.index:
+		case i == m.Index:
 			style = RepoCard100
 			selectedCardIndex = len(renderedCards)
-		case i == m.index-1 || i == m.index+1:
+		case i == m.Index-1 || i == m.Index+1:
 			style = RepoCard75
-		case i == m.index-2 || i == m.index+2:
+		case i == m.Index-2 || i == m.Index+2:
 			style = RepoCard50
 		}
 
